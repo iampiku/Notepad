@@ -1,10 +1,10 @@
 <template>
 	<main>
-		<AddNoteModal @add-note="handleAddNote"></AddNoteModal>
 		<ThemeSwitch
-			class="absolute top-6 right-6"
+			class="absolute top-7 right-6"
 			@onThemeChange="handleThemeChange"
 		></ThemeSwitch>
+		<AddNoteModal @onAddNote="handleAddNote"></AddNoteModal>
 	</main>
 </template>
 
