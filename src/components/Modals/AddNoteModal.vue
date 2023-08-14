@@ -1,7 +1,7 @@
 <template>
 	<button
 		type="button"
-		@click="notesModal.showModal()"
+		@click="showModal = true"
 		class="btn btn-circle btn-primary cursor-pointer absolute bottom-6 right-6"
 	>
 		<div class="tooltip" data-tip="Add Notes">
@@ -21,42 +21,34 @@
 			</svg>
 		</div>
 	</button>
-	<dialog class="modal" ref="notesModal">
-		<form method="dialog" class="modal-box">
-			<button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
-				✕
-			</button>
-			<h3 class="font-bold text-lg text-center">Add Note</h3>
-			<form class="form-control flex flex-col gap-2">
-				<label for="title" class="label-text">Title</label>
-				<input
-					type="text"
-					name="title"
-					id="title"
-					autocomplete="off"
-					class="input input-bordered w-full"
-					v-model="title"
-				/>
-				<label for="note" class="label-text">Note</label>
-				<textarea
-					name="note"
-					id="note"
-					cols="30"
-					rows="10"
-					class="textarea input-bordered w-full"
-					v-model="note"
-				></textarea>
-				<button
-					type="button"
-					class="btn btn-primary"
-					:disabled="isDisabled"
-					@click.prevent="handleSubmit"
-				>
-					Add
-				</button>
-			</form>
-		</form>
-	</dialog>
+
+	<Modal
+		:modal="modalSetup"
+		v-model="showModal"
+		@onModalClick="handleSubmit"
+		@onModalClose="handleModalClose"
+	>
+		<template #body>
+			<label for="title" class="label-text">Title</label>
+			<input
+				type="text"
+				name="title"
+				id="title"
+				autocomplete="off"
+				class="input input-bordered w-full"
+				v-model="title"
+			/>
+			<label for="note" class="label-text">Note</label>
+			<textarea
+				name="note"
+				id="note"
+				cols="30"
+				rows="10"
+				class="textarea input-bordered w-full"
+				v-model="note"
+			></textarea>
+		</template>
+	</Modal>
 </template>
 
 <script setup lang="ts">
@@ -70,22 +62,35 @@ import { ref, computed } from "vue";
  */
 import INote from "@/interface/INote";
 
-const notesModal = ref<any>(null);
+/**
+ * Component
+ */
+import Modal from "@/components/Modals/Modal.vue";
+
 const title = ref<string>("");
 const note = ref<string>("");
+const showModal = ref<boolean>(false);
 
-const emit = defineEmits<(e: "add-note", note: INote) => void>();
+const emit = defineEmits<(e: "onAddNote", note: INote) => void>();
 
 const isDisabled = computed(() => {
 	return !(title.value.length > 3 && note.value.length > 5);
 });
-
+const modalSetup = ref<{ title: string; label: string; disabled: boolean }>({
+	title: "Add Note",
+	label: "Add",
+	disabled: isDisabled.value,
+});
 function handleSubmit(): void {
-	emit("add-note", {
+	emit("onAddNote", {
 		title: title.value,
 		note: note.value,
 		status: "Todo",
 		createdAt: new Date().toLocaleDateString(),
 	});
+}
+function handleModalClose(): void {
+	title.value = "";
+	note.value = "";
 }
 </script>

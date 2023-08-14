@@ -35,7 +35,12 @@
 			</form>
 		</form>
 	</dialog> -->
-	<Modal :modal="modalSetup" @onDialogClick="handleSave">
+	<Modal
+		:modal="modalSetup"
+		v-modal="showModal"
+		@onModalClick="handleSave"
+		@onModalClose="handleModalClose"
+	>
 		<template #body>
 			<label for="title" class="label-text">Title</label>
 			<input
@@ -75,13 +80,14 @@ import Modal from "@/components/Modals/Modal.vue";
 interface Props {
 	editNote: INote;
 }
-
 const props = withDefaults(defineProps<Props>(), {
 	editNote: () => ({ title: "", note: "", status: "Todo", createdAt: "" }),
 });
+
 const emit = defineEmits<(e: "edit-note", note: INote) => void>();
 
 const status = ref<"Todo" | "Completed" | "Inprogress">("Todo");
+const showModal = ref<boolean>(false);
 
 const isDisabled: ComputedRef<boolean> = computed(() => {
 	return !(
@@ -105,5 +111,9 @@ const internalNote = computed(() => {
 
 function handleSave(): void {
 	emit("edit-note", internalNote.value);
+}
+
+function handleModalClose() {
+	console.log("Modal Close");
 }
 </script>
