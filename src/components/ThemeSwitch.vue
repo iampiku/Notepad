@@ -5,7 +5,7 @@
 			type="checkbox"
 			id="theme-switch"
 			name="theme-switch"
-			@click="$emit('theme-change', isDark)"
+			@click="$emit('onThemeChange', isDark)"
 		/>
 		<svg
 			xmlns="http://www.w3.org/2000/svg"
