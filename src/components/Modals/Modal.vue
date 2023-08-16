@@ -1,5 +1,5 @@
 <template>
-	<dialog class="modal" :open="modelValue">
+	<dialog class="modal" :open="modelValue" v-if="modelValue">
 		<form method="dialog" class="modal-box">
 			<button
 				class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"

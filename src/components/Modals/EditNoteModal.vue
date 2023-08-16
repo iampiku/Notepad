@@ -12,15 +12,17 @@
 			/>
 			<label for="status" class="label-text">Status</label>
 			<select
+				id="status"
+				v-model="internalNote.status"
 				class="select btn-ghost btn-sm pr-7 join-item"
-				v-model="note.status"
 			>
 				<option
-					v-for="({ _selected, label }, index) in selectStatus"
+					v-for="(selectItem, index) in selectStatus"
 					:key="index"
-					:selected="_selected"
+					:value="selectItem"
+					:selected="selectItem._selected"
 				>
-					{{ label }}
+					{{ selectItem.label }}
 				</option>
 			</select>
 			<label for="note" class="label-text">Note</label>
@@ -56,6 +58,7 @@ import { computed, ref, ComputedRef } from "vue";
  * Interface
  */
 import INote from "@/interface/INote";
+import IStatus from "@/interface/IStatus";
 
 /**
  * Component
@@ -70,10 +73,8 @@ const props = withDefaults(defineProps<Props>(), {
 });
 
 const emit = defineEmits<(e: "onEditNote", note: INote) => void>();
-
-const status = ref<"Todo" | "Completed" | "Inprogress">("Todo");
 const showModal = ref<boolean>(false);
-const selectStatus = ref<{ _selected: boolean; label: string }[]>([
+const selectStatus = ref<IStatus[]>([
 	{ _selected: false, label: "Todo" },
 	{ _selected: false, label: "Inprogress" },
 	{ _selected: false, label: "Completed" },
