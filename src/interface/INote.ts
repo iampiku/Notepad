@@ -1,6 +1,6 @@
 export default interface Note {
-	title: string;
 	note: string;
-	status: "Todo" | "Completed" | "Inprogress";
+	title: string;
 	createdAt: string;
+	status: "Todo" | "Completed" | "Inprogress";
 }
