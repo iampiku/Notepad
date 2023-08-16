@@ -1,4 +1,4 @@
-import { reactive } from "vue";
+import { reactive, computed } from "vue";
 import { defineStore } from "pinia";
 
 import INote from "@/interface/INote";
@@ -34,8 +34,13 @@ export const useNoteStore = defineStore("note", () => {
 		return notes.splice(index, 1);
 	}
 
+	const noteCount = computed(() => {
+		return notes.length;
+	});
+
 	return {
 		notes,
+		noteCount,
 		selectedNote,
 		filterNotes,
 		removeNote,
