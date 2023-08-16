@@ -6,7 +6,7 @@
 				type="checkbox"
 				id="theme-switch"
 				name="theme-switch"
-				@click="$emit('onThemeChange', isDark)"
+				@click="emit('onThemeChange', isDark)"
 			/>
 			<svg
 				xmlns="http://www.w3.org/2000/svg"
@@ -44,4 +44,5 @@
 import { ref } from "vue";
 
 const isDark = ref<boolean>(false);
+const emit = defineEmits<(e: "onThemeChange", isDark: boolean) => void>();
 </script>

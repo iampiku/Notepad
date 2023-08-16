@@ -1,46 +1,5 @@
 <template>
-	<!-- <dialog class="modal" ref="notesModal">
-		<form method="dialog" class="modal-box">
-			<button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
-				✕
-			</button>
-			<h3 class="font-bold text-lg text-center">Edit Note</h3>
-			<form class="form-control flex flex-col gap-2">
-				<label for="title" class="label-text">Title</label>
-				<input
-					type="text"
-					name="title"
-					id="title"
-					autocomplete="off"
-					class="input input-bordered w-full"
-					v-model="internalNote.title"
-				/>
-				<label for="note" class="label-text">Note</label>
-				<textarea
-					name="note"
-					id="note"
-					cols="30"
-					rows="10"
-					class="textarea input-bordered w-full"
-					v-model="internalNote.note"
-				></textarea>
-				<button
-					type="button"
-					class="btn btn-primary"
-					:disabled="isDisabled"
-					@click.prevent="handleSave"
-				>
-					Save
-				</button>
-			</form>
-		</form>
-	</dialog> -->
-	<Modal
-		:modal="modalSetup"
-		v-modal="showModal"
-		@onModalClick="handleSave"
-		@onModalClose="handleModalClose"
-	>
+	<Modal :modal="modalSetup" v-modal="showModal" @onModalClick="handleSave">
 		<template #body>
 			<label for="title" class="label-text">Title</label>
 			<input
@@ -51,6 +10,19 @@
 				class="input input-bordered w-full"
 				v-model="internalNote.title"
 			/>
+			<label for="status" class="label-text">Status</label>
+			<select
+				class="select btn-ghost btn-sm pr-7 join-item"
+				v-model="note.status"
+			>
+				<option
+					v-for="({ _selected, label }, index) in selectStatus"
+					:key="index"
+					:selected="_selected"
+				>
+					{{ label }}
+				</option>
+			</select>
 			<label for="note" class="label-text">Note</label>
 			<textarea
 				name="note"
@@ -60,6 +32,16 @@
 				class="textarea input-bordered w-full"
 				v-model="internalNote.note"
 			></textarea>
+		</template>
+		<template #action>
+			<button
+				type="button"
+				class="btn btn-primary"
+				:disabled="isDisabled"
+				@click.prevent="handleSave"
+			>
+				Edit
+			</button>
 		</template>
 	</Modal>
 </template>
@@ -75,6 +57,9 @@ import { computed, ref, ComputedRef } from "vue";
  */
 import INote from "@/interface/INote";
 
+/**
+ * Component
+ */
 import Modal from "@/components/Modals/Modal.vue";
 
 interface Props {
@@ -84,10 +69,15 @@ const props = withDefaults(defineProps<Props>(), {
 	editNote: () => ({ title: "", note: "", status: "Todo", createdAt: "" }),
 });
 
-const emit = defineEmits<(e: "edit-note", note: INote) => void>();
+const emit = defineEmits<(e: "onEditNote", note: INote) => void>();
 
 const status = ref<"Todo" | "Completed" | "Inprogress">("Todo");
 const showModal = ref<boolean>(false);
+const selectStatus = ref<{ _selected: boolean; label: string }[]>([
+	{ _selected: false, label: "Todo" },
+	{ _selected: false, label: "Inprogress" },
+	{ _selected: false, label: "Completed" },
+]);
 
 const isDisabled: ComputedRef<boolean> = computed(() => {
 	return !(
@@ -95,10 +85,8 @@ const isDisabled: ComputedRef<boolean> = computed(() => {
 	);
 });
 
-const modalSetup = ref<{ title: string; label: string; disabled: boolean }>({
+const modalSetup = ref<{ title: string }>({
 	title: "Edit Note",
-	label: "Save",
-	disabled: isDisabled.value,
 });
 
 const internalNote = computed(() => {
@@ -110,10 +98,6 @@ const internalNote = computed(() => {
 });
 
 function handleSave(): void {
-	emit("edit-note", internalNote.value);
-}
-
-function handleModalClose() {
-	console.log("Modal Close");
+	emit("onEditNote", internalNote.value);
 }
 </script>

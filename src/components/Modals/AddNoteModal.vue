@@ -36,7 +36,7 @@
 				id="title"
 				autocomplete="off"
 				class="input input-bordered w-full"
-				v-model="title"
+				v-model.trim="title"
 			/>
 			<label for="note" class="label-text">Note</label>
 			<textarea
@@ -45,8 +45,18 @@
 				cols="30"
 				rows="10"
 				class="textarea input-bordered w-full"
-				v-model="note"
+				v-model.trim="note"
 			></textarea>
+		</template>
+		<template #action>
+			<button
+				type="button"
+				class="btn btn-primary"
+				:disabled="isDisabled"
+				@click.prevent="handleSubmit"
+			>
+				Add Note
+			</button>
 		</template>
 	</Modal>
 </template>
@@ -76,10 +86,13 @@ const emit = defineEmits<(e: "onAddNote", note: INote) => void>();
 const isDisabled = computed(() => {
 	return !(title.value.length > 3 && note.value.length > 5);
 });
-const modalSetup = ref<{ title: string; label: string; disabled: boolean }>({
+const modalSetup = ref<{
+	title: string;
+
+	showModal: boolean;
+}>({
 	title: "Add Note",
-	label: "Add",
-	disabled: isDisabled.value,
+	showModal: false,
 });
 function handleSubmit(): void {
 	emit("onAddNote", {
@@ -88,6 +101,9 @@ function handleSubmit(): void {
 		status: "Todo",
 		createdAt: new Date().toLocaleDateString(),
 	});
+	title.value = "";
+	note.value = "";
+	showModal.value = false;
 }
 function handleModalClose(): void {
 	title.value = "";
