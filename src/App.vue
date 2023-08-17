@@ -5,18 +5,30 @@
 			@onThemeChange="handleThemeChange"
 		></ThemeSwitch>
 		<AddNoteModal @onAddNote="handleAddNote"></AddNoteModal>
-		<EditNoteModal @onEditNote="handleEditNote"></EditNoteModal>
+		<!-- <EditNoteModal @onEditNote="handleEditNote"></EditNoteModal> -->
 		<NotesGrid></NotesGrid>
+		<NotificationToast
+			type="success"
+			v-if="showNotification"
+			message="Note added Successfully"
+		></NotificationToast>
 	</main>
 </template>
 
 <script setup lang="ts">
 /**
+ * vue
+ */
+import { ref } from "vue";
+
+/**
  * Components
  */
 import AddNoteModal from "@/components/Modals/AddNoteModal.vue";
+// import EditNoteModal from "@/components/Modals/EditNoteModal.vue";
 import ThemeSwitch from "@/components/ThemeSwitch.vue";
 import NotesGrid from "@/components/Notes/NotesGrid.vue";
+import NotificationToast from "@/components/NotificationToast.vue";
 
 /**
  * Interface
@@ -31,16 +43,25 @@ const noteStore = useNoteStore();
 
 function handleAddNote(note: INote) {
 	noteStore.createNewNote(note);
+	showToast();
 }
 
-function handleEditNote(note: INote) {
-	console.log(note);
-}
+// function handleEditNote(note: INote) {
+// 	console.log(note);
+// }
 
 function handleThemeChange(isDark: boolean) {
 	document.documentElement.setAttribute(
 		"data-theme",
 		isDark ? "night" : "fantasy"
 	);
+}
+
+const showNotification = ref<boolean>(false);
+function showToast() {
+	showNotification.value = true;
+	setTimeout(() => {
+		showNotification.value = false;
+	}, 3000);
 }
 </script>

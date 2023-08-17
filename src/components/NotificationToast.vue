@@ -1,8 +1,8 @@
 <template>
-	<div class="toast toast-top toast-end">
-		<div :class="`alert alert-${type}`">
+	<div class="toast toast-bottom toast-center">
+		<div :class="`alert alert-${props.type}`">
 			<svg
-				v-if="type === 'Success'"
+				v-if="props.type === 'success'"
 				xmlns="http://www.w3.org/2000/svg"
 				fill="none"
 				viewBox="0 0 24 24"
@@ -17,7 +17,7 @@
 				/>
 			</svg>
 			<svg
-				v-if="type === 'Error'"
+				v-if="props.type === 'error'"
 				xmlns="http://www.w3.org/2000/svg"
 				fill="none"
 				viewBox="0 0 24 24"
@@ -32,7 +32,7 @@
 				/>
 			</svg>
 			<svg
-				v-if="type === 'Info'"
+				v-if="props.type === 'info'"
 				xmlns="http://www.w3.org/2000/svg"
 				fill="none"
 				viewBox="0 0 24 24"
@@ -46,7 +46,7 @@
 					d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z"
 				/>
 			</svg>
-			<span>{{ message }}</span>
+			<span>{{ props.message }}</span>
 		</div>
 	</div>
 </template>
@@ -54,8 +54,8 @@
 <script setup lang="ts">
 interface Props {
 	message: string;
-	type: "Error" | "Success" | "Info";
+	type: "error" | "success" | "info";
 }
 
-const { message, type } = defineProps<Props>();
+const props = defineProps<Props>();
 </script>
