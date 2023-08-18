@@ -1,6 +1,6 @@
 <template>
-	<template v-if="noteStore.noteCount !== 0">
-		<div class="grid gap-3 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 w-2/3">
+	<div class="grid gap-3 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 w-2/3">
+		<template v-if="noteStore.noteCount !== 0">
 			<NoteCard
 				:key="index"
 				:note="note"
@@ -8,11 +8,11 @@
 				@onRemove="handleRemove"
 				v-for="(note, index) in noteStore.notes"
 			></NoteCard>
-		</div>
-	</template>
-	<template v-else>
-		<EmptyNotes />
-	</template>
+		</template>
+		<template v-else>
+			<EmptyNotes class="col-span-full"></EmptyNotes>
+		</template>
+	</div>
 </template>
 
 <script setup lang="ts">
