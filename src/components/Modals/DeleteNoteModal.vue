@@ -14,10 +14,18 @@
 <script setup lang="ts">
 import Modal from "@/components/Modals/Modal.vue";
 
+import { ref, watch } from "vue";
+const showModal = ref<boolean>(false);
+
 interface Props {
 	message: string;
-	showModal: boolean;
+	showDeleteModal: boolean;
 }
-
+watch(
+	() => props.showDeleteModal,
+	(modalValue: boolean) => {
+		showModal.value = modalValue;
+	}
+);
 const props = defineProps<Props>();
 </script>

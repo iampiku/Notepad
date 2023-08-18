@@ -11,20 +11,12 @@
 				v-model="internalNote.title"
 			/>
 			<label for="status" class="label-text">Status</label>
-			<select
-				id="status"
-				v-model="internalNote.status"
-				class="select btn-ghost btn-sm pr-7 join-item"
-			>
-				<option
-					v-for="(selectItem, index) in selectStatus"
-					:key="index"
-					:value="selectItem"
-					:selected="selectItem._selected"
-				>
-					{{ selectItem.label }}
-				</option>
-			</select>
+			<Dropdown
+				size="sm"
+				label="label"
+				:items="selectStatus"
+				selectionType="bordered"
+			></Dropdown>
 			<label for="note" class="label-text">Note</label>
 			<textarea
 				name="note"
@@ -52,7 +44,7 @@
 /**
  * Vue
  */
-import { computed, ref, ComputedRef } from "vue";
+import { computed, ref, ComputedRef, watch } from "vue";
 
 /**
  * Interface
@@ -64,27 +56,37 @@ import IStatus from "@/interface/IStatus";
  * Component
  */
 import Modal from "@/components/Modals/Modal.vue";
+import Dropdown from "@/components/Dropdown.vue";
 
 interface Props {
 	editNote: INote;
+	showEditModal: boolean;
 }
 const props = withDefaults(defineProps<Props>(), {
 	editNote: () => ({ title: "", note: "", status: "Todo", createdAt: "" }),
+	showEditModal: false,
 });
 
 const emit = defineEmits<(e: "onEditNote", note: INote) => void>();
-const showModal = ref<boolean>(false);
 const selectStatus = ref<IStatus[]>([
 	{ _selected: false, label: "Todo" },
 	{ _selected: false, label: "Inprogress" },
 	{ _selected: false, label: "Completed" },
 ]);
+const showModal = ref<boolean>(false);
 
 const isDisabled: ComputedRef<boolean> = computed(() => {
 	return !(
 		internalNote.value.title.length > 3 && internalNote.value.note.length > 5
 	);
 });
+
+watch(
+	() => props.showEditModal,
+	(modalValue: boolean) => {
+		showModal.value = modalValue;
+	}
+);
 
 const modalSetup = ref<{ title: string }>({
 	title: "Edit Note",
@@ -93,7 +95,6 @@ const modalSetup = ref<{ title: string }>({
 const internalNote = computed(() => {
 	return {
 		...props.editNote,
-		status: status.value,
 		createdAt: new Date().toLocaleDateString(),
 	};
 });

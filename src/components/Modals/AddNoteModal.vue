@@ -39,20 +39,13 @@
 				class="input input-bordered w-full"
 			/>
 			<label for="status" class="label-text">Status</label>
-			<select
-				id="status"
-				v-model="selectedStatus"
-				class="select btn-md btn-ghost"
-			>
-				<option
-					:key="index"
-					:value="selectItem"
-					:selected="selectItem._selected"
-					v-for="(selectItem, index) in selectStatus"
-				>
-					{{ selectItem.label }}
-				</option>
-			</select>
+			<Dropdown
+				size="sm"
+				label="label"
+				:items="status"
+				selectionType="bordered"
+				@onSelection="handleStatusChange"
+			></Dropdown>
 			<label for="note" class="label-text">Note</label>
 			<textarea
 				name="note"
@@ -92,6 +85,7 @@ import IStats from "@/interface/IStatus";
  * Component
  */
 import Modal from "@/components/Modals/Modal.vue";
+import Dropdown from "@/components/Dropdown.vue";
 
 /**
  * State
@@ -101,7 +95,7 @@ const note = ref<string>("");
 const showModal = ref<boolean>(false);
 const selectedStatus = ref<IStats>();
 const modalSetup = ref<{ title: string }>({ title: "Add Note" });
-const selectStatus = ref<IStats[]>([
+const status = ref<IStats[]>([
 	{ _selected: true, label: "Todo" },
 	{ _selected: false, label: "Inprogress" },
 	{ _selected: false, label: "Completed" },
@@ -118,7 +112,7 @@ function handleSubmit(): void {
 		title: title.value,
 		note: note.value,
 		status: selectedStatus.value?.label ?? "Todo",
-		createdAt: new Date().toLocaleDateString(),
+		createdAt: new Date().toLocaleString(),
 	});
 	title.value = "";
 	note.value = "";
@@ -127,6 +121,9 @@ function handleSubmit(): void {
 function handleModalClose(): void {
 	title.value = "";
 	note.value = "";
-	selectStatus.value[0]._selected = true;
+}
+
+function handleStatusChange(note: any) {
+	console.log(note);
 }
 </script>
