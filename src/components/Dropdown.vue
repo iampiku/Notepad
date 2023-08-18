@@ -1,0 +1,50 @@
+<template>
+	<select
+		id="select"
+		v-model="selectedItem"
+		@change="handleSelection"
+		:class="`select select-${props.selectionType} btn-${props.size}`"
+	>
+		<option value="status" disabled selected>Status</option>
+		<option
+			:key="index"
+			:value="selectItem"
+			v-for="(selectItem, index) in items"
+		>
+			{{ selectItem[props.label] }}
+		</option>
+	</select>
+</template>
+
+<script setup lang="ts">
+import { ref } from "vue";
+
+const selectedItem = ref<SelectItems | null>(null);
+
+interface SelectItems {
+	_selected: boolean;
+	[key: string]: any;
+}
+
+interface Props<T extends SelectItems> {
+	items: Array<T>;
+	label: string;
+	size: "sm" | "lg" | "md" | "wide" | "block";
+	selectionType:
+		| "ghost"
+		| "primary"
+		| "secondary"
+		| "success"
+		| "warning"
+		| "error"
+		| "bordered";
+}
+
+const props = defineProps<Props<any>>();
+const emit =
+	defineEmits<(e: "onSelection", item: SelectItems | null) => void>();
+
+function handleSelection(): void {
+	emit("onSelection", selectedItem.value);
+}
+</script>
