@@ -4,19 +4,10 @@ import { defineStore } from "pinia";
 import INote from "@/interface/INote";
 
 export const useNoteStore = defineStore("note", () => {
-	/**
-	 * State
-	 */
 	const notes: INote[] = reactive<INote[]>([]);
-	const selectedNote: INote = reactive<INote>({
-		note: "",
-		title: "",
-		createdAt: "",
-		status: "Todo",
-	});
 
 	function sanitizeNotes(note: INote): boolean {
-		return Object.keys(note).every((key: string) => {
+		return Object.keys(note).every((key) => {
 			return note[key].trim().length;
 		});
 	}
@@ -41,10 +32,8 @@ export const useNoteStore = defineStore("note", () => {
 	return {
 		notes,
 		noteCount,
-		selectedNote,
-		filterNotes,
 		removeNote,
-		sanitizeNotes,
+		filterNotes,
 		createNewNote,
 	};
 });
