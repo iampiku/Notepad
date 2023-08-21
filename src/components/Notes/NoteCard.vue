@@ -1,8 +1,13 @@
 <template>
-	<div class="card bg-primary-content shadow-xl border-gray-200 border-2">
+	<div
+		class="card card-compact bg-primary-content shadow-xl border-gray-200 border-2"
+	>
 		<div class="card-body p-4">
 			<h2 class="card-title">{{ note.title }}</h2>
 			<p>{{ note.note }}</p>
+			<div class="badge badge-secondary pb-1 font-bold">
+				{{ note.status }}
+			</div>
 			<div class="card-actions justify-between align-center gap-2 flex-nowrap">
 				<span class="pt-1">{{ note.createdAt }}</span>
 				<div class="join">
@@ -17,7 +22,7 @@
 								viewBox="0 0 24 24"
 								stroke-width="1.5"
 								stroke="currentColor"
-								class="w-6 h-6"
+								class="w-6"
 							>
 								<path
 									stroke-linecap="round"
@@ -38,7 +43,7 @@
 								viewBox="0 0 24 24"
 								stroke-width="1.5"
 								stroke="currentColor"
-								class="w-6 h-6"
+								class="w-6"
 							>
 								<path
 									stroke-linecap="round"

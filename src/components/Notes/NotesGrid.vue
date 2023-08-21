@@ -1,5 +1,7 @@
 <template>
-	<div class="grid gap-3 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 w-2/3">
+	<div
+		class="grid gap-3 grid-rows-3 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 w-2/3"
+	>
 		<template v-if="noteStore.noteCount !== 0">
 			<NoteCard
 				:key="index"
@@ -10,7 +12,7 @@
 			></NoteCard>
 		</template>
 		<template v-else>
-			<EmptyNotes class="col-span-full"></EmptyNotes>
+			<EmptyNotes class="col-span-full row-span-full"></EmptyNotes>
 		</template>
 	</div>
 </template>
