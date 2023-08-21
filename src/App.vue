@@ -1,5 +1,5 @@
 <template>
-	<main class="flex justify-center pt-20 min-h-screen">
+	<main class="flex justify-center pt-20 pb-6 min-h-screen">
 		<ThemeSwitch
 			class="absolute top-7 right-6"
 			@onThemeChange="handleThemeChange"
@@ -33,7 +33,7 @@ import { ref } from "vue";
  */
 import AddNoteModal from "@/components/Modals/AddNoteModal.vue";
 import EditNoteModal from "@/components/Modals/EditNoteModal.vue";
-import DeleteNoteModal from "@/components/Modals/DeleteNoteModal.vue";
+// import DeleteNoteModal from "@/components/Modals/DeleteNoteModal.vue";
 import ThemeSwitch from "@/components/ThemeSwitch.vue";
 import NotesGrid from "@/components/Notes/NotesGrid.vue";
 import NotificationToast from "@/components/NotificationToast.vue";
