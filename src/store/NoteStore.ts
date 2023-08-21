@@ -6,15 +6,14 @@ import INote from "@/interface/INote";
 export const useNoteStore = defineStore("note", () => {
 	const notes: INote[] = reactive<INote[]>([]);
 
-	function sanitizeNotes(note: INote): boolean {
-		return Object.keys(note).every((key) => {
-			return note[key].trim().length;
-		});
+	function createNewNote(note: INote): void {
+		notes.push(note);
 	}
 
-	function createNewNote(note: INote): void {
-		if (sanitizeNotes(note)) notes.push(note);
-		else throw new Error("All the properties of notes must be populated.");
+	function updateNote(note: INote): number {
+		const index = notes.findIndex(({ id }) => id === note.id);
+		notes[index] = note;
+		return note.id;
 	}
 
 	function filterNotes(type: "Todo" | "Completed" | "Inprogress"): INote[] {
@@ -33,6 +32,7 @@ export const useNoteStore = defineStore("note", () => {
 		notes,
 		noteCount,
 		removeNote,
+		updateNote,
 		filterNotes,
 		createNewNote,
 	};

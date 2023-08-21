@@ -109,10 +109,12 @@ const isDisabled = computed(() => {
 
 function handleSubmit(): void {
 	emit("onAddNote", {
+		id: Date.now(),
 		title: title.value,
 		note: note.value,
 		status: selectedStatus.value?.label ?? "Todo",
 		createdAt: new Date().toLocaleString(),
+		updatedAt: new Date().toLocaleString(),
 	});
 	title.value = "";
 	note.value = "";
@@ -124,6 +126,6 @@ function handleModalClose(): void {
 }
 
 function handleStatusChange(note: any) {
-	console.log(note);
+	selectedStatus.value = note;
 }
 </script>

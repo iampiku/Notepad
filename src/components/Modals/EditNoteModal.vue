@@ -16,6 +16,7 @@
 				label="label"
 				:items="selectStatus"
 				selectionType="bordered"
+				@onSelection="handleStatusChange"
 			></Dropdown>
 			<label for="note" class="label-text">Note</label>
 			<textarea
@@ -63,7 +64,14 @@ interface Props {
 	showEditModal: boolean;
 }
 const props = withDefaults(defineProps<Props>(), {
-	editNote: () => ({ title: "", note: "", status: "Todo", createdAt: "" }),
+	editNote: () => ({
+		id: 0,
+		title: "",
+		note: "",
+		status: "Todo",
+		createdAt: "",
+		updatedAt: "",
+	}),
 	showEditModal: false,
 });
 
@@ -74,6 +82,7 @@ const selectStatus = ref<IStatus[]>([
 	{ _selected: false, label: "Completed" },
 ]);
 const showModal = ref<boolean>(false);
+const selectedStatus = ref<IStatus>();
 
 const isDisabled: ComputedRef<boolean> = computed(() => {
 	return !(
@@ -98,6 +107,10 @@ const internalNote = computed(() => {
 		createdAt: new Date().toLocaleDateString(),
 	};
 });
+
+function handleStatusChange(status: IStatus): void {
+	selectedStatus.value = status;
+}
 
 function handleSave(): void {
 	emit("onEditNote", internalNote.value);
