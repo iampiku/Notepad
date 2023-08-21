@@ -6,10 +6,15 @@
 		></ThemeSwitch>
 		<AddNoteModal @onAddNote="handleAddNote"></AddNoteModal>
 		<EditNoteModal
-			:showModal="showEditModal"
+			:editNote="editNote"
+			:showEditModal="showEditModal"
 			@onEditNote="handleEditNote"
 		></EditNoteModal>
-		<!-- <DeleteNoteModal :message=""></DeleteNoteModal> -->
+		<DeleteNoteModal
+			:message="deleteMessage"
+			:showDeleteModal="showDeleteModal"
+			@onDelete="handleDeleteNote"
+		></DeleteNoteModal>
 		<NotesGrid
 			@onEdit="handleEditAction"
 			@onRemove="handleRemoveAction"
@@ -33,7 +38,7 @@ import { ref } from "vue";
  */
 import AddNoteModal from "@/components/Modals/AddNoteModal.vue";
 import EditNoteModal from "@/components/Modals/EditNoteModal.vue";
-// import DeleteNoteModal from "@/components/Modals/DeleteNoteModal.vue";
+import DeleteNoteModal from "@/components/Modals/DeleteNoteModal.vue";
 import ThemeSwitch from "@/components/ThemeSwitch.vue";
 import NotesGrid from "@/components/Notes/NotesGrid.vue";
 import NotificationToast from "@/components/NotificationToast.vue";
@@ -80,8 +85,20 @@ function handleEditAction(note: INote) {
 	showEditModal.value = true;
 }
 
+const showDeleteModal = ref<boolean>(false);
+const deleteMessage = ref<string>("");
+const noteToBeDeleted = ref<INote>();
 function handleRemoveAction(note: INote) {
-	const index: number = noteStore.notes.indexOf(note);
-	noteStore.removeNote(index);
+	showDeleteModal.value = true;
+	noteToBeDeleted.value = note;
+	deleteMessage.value = `Are you sure, you want to delete ${note.title} ?`;
+}
+function handleDeleteNote() {
+	if (noteToBeDeleted.value) {
+		const index: number = noteStore.notes.indexOf(noteToBeDeleted.value);
+		noteStore.removeNote(index);
+		showDeleteModal.value = false;
+		deleteMessage.value = "";
+	}
 }
 </script>
