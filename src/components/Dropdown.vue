@@ -3,7 +3,7 @@
 		id="select"
 		v-model="selectedItem"
 		@change="handleSelection"
-		:class="`select select-${props.selectionType} btn-${props.size}`"
+		:class="`select select-bordered select-${props.selectionType} btn-${props.size}`"
 	>
 		<option value="status" disabled selected>Status</option>
 		<option
@@ -18,8 +18,6 @@
 
 <script setup lang="ts">
 import { ref } from "vue";
-
-const selectedItem = ref<SelectItems | null>(null);
 
 interface SelectItems {
 	_selected: boolean;
@@ -41,6 +39,9 @@ interface Props<T extends SelectItems> {
 }
 
 const props = defineProps<Props<any>>();
+const selectedItem = ref<SelectItems>(
+	props.items.find((item) => item._selected)
+);
 const emit =
 	defineEmits<(e: "onSelection", item: SelectItems | null) => void>();
 
