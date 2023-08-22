@@ -5,9 +5,14 @@
 		<div class="card-body p-4">
 			<h2 class="card-title">{{ note.title }}</h2>
 			<p>{{ note.note }}</p>
-			<div class="badge badge-secondary pb-1 font-bold">
+
+			<div
+				class="badge badge-secondary pb-3 font-bold tooltip"
+				data-tip="Status"
+			>
 				{{ note.status }}
 			</div>
+
 			<div class="card-actions justify-between align-center gap-2 flex-nowrap">
 				<span class="pt-1">{{ note.createdAt }}</span>
 				<div class="join">

@@ -3,9 +3,8 @@
 		id="select"
 		v-model="selectedItem"
 		@change="handleSelection"
-		:class="`select select-bordered select-${props.selectionType} btn-${props.size}`"
+		:class="`select select-${props.selectionType} btn-${props.size}`"
 	>
-		<option value="status" disabled selected>Status</option>
 		<option
 			:key="index"
 			:value="selectItem"
@@ -23,7 +22,6 @@ interface SelectItems {
 	_selected: boolean;
 	[key: string]: any;
 }
-
 interface Props<T extends SelectItems> {
 	items: Array<T>;
 	label: string;

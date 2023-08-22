@@ -1,29 +1,30 @@
 <template>
+	<ThemeSwitch
+		class="absolute top-7 right-6"
+		@onThemeChange="handleThemeChange"
+	></ThemeSwitch>
+	<AddNoteModal @onAddNote="handleAddNote"></AddNoteModal>
+	<EditNoteModal
+		:editNote="editNote"
+		:showEditModal="showEditModal"
+		@onEditNote="handleEditNote"
+	></EditNoteModal>
+	<DeleteNoteModal
+		:message="deleteMessage"
+		:showDeleteModal="showDeleteModal"
+		@onDelete="handleDeleteNote"
+	></DeleteNoteModal>
+	<NotificationToast
+		type="success"
+		v-if="showNotification"
+		message="Note added Successfully"
+	></NotificationToast>
 	<main class="flex justify-center pt-20 pb-6 min-h-screen">
-		<ThemeSwitch
-			class="absolute top-7 right-6"
-			@onThemeChange="handleThemeChange"
-		></ThemeSwitch>
-		<AddNoteModal @onAddNote="handleAddNote"></AddNoteModal>
-		<EditNoteModal
-			:editNote="editNote"
-			:showEditModal="showEditModal"
-			@onEditNote="handleEditNote"
-		></EditNoteModal>
-		<DeleteNoteModal
-			:message="deleteMessage"
-			:showDeleteModal="showDeleteModal"
-			@onDelete="handleDeleteNote"
-		></DeleteNoteModal>
 		<NotesGrid
 			@onEdit="handleEditAction"
 			@onRemove="handleRemoveAction"
 		></NotesGrid>
-		<NotificationToast
-			type="success"
-			v-if="showNotification"
-			message="Note added Successfully"
-		></NotificationToast>
+		<!-- <footer class="text-center">Made with ❤️ and Vuejs by Pradipta</footer> -->
 	</main>
 </template>
 

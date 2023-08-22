@@ -1,5 +1,10 @@
 <template>
-	<Modal :modal="modalSetup" v-modal="showModal" @onModalClick="handleSave">
+	<Modal
+		:modal="{ title: 'Edit Note' }"
+		v-model="showModal"
+		@onModalClick="handleSave"
+		@onModalClose="showModal = false"
+	>
 		<template #body>
 			<label for="title" class="label-text">Title</label>
 			<input
@@ -81,8 +86,7 @@ const selectStatus = ref<IStatus[]>([
 	{ _selected: false, label: "Inprogress" },
 	{ _selected: false, label: "Completed" },
 ]);
-const showModal = ref<boolean>(false);
-const selectedStatus = ref<IStatus>();
+const showModal = ref<boolean>(true);
 
 const isDisabled: ComputedRef<boolean> = computed(() => {
 	return !(
@@ -97,19 +101,15 @@ watch(
 	}
 );
 
-const modalSetup = ref<{ title: string }>({
-	title: "Edit Note",
-});
-
 const internalNote = computed(() => {
 	return {
 		...props.editNote,
-		createdAt: new Date().toLocaleDateString(),
+		updatedAt: new Date().toLocaleDateString(),
 	};
 });
 
-function handleStatusChange(status: IStatus): void {
-	selectedStatus.value = status;
+function handleStatusChange(status: any): void {
+	console.log(status);
 }
 
 function handleSave(): void {
