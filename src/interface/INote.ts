@@ -4,5 +4,5 @@ export default interface Note {
 	title: string;
 	createdAt: string;
 	updatedAt: string;
-	status: "Todo" | "Completed" | "Inprogress";
+	status: "Todo" | "Completed" | "Inprogress" | "Pending";
 }
