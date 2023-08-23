@@ -1,5 +1,5 @@
 <template>
-	<div class="tooltip tooltip-left" data-tip="Theme Switch">
+	<div class="tooltip tooltip-left" data-tip="THEME SWITCH">
 		<label for="theme-switch" class="swap swap-rotate">
 			<input
 				v-model="isDark"

@@ -86,7 +86,7 @@ const selectStatus = ref<IStatus[]>([
 	{ _selected: false, label: "Inprogress" },
 	{ _selected: false, label: "Completed" },
 ]);
-const showModal = ref<boolean>(true);
+const showModal = ref<boolean>(false);
 
 const isDisabled: ComputedRef<boolean> = computed(() => {
 	return !(
