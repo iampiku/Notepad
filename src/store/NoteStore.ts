@@ -1,9 +1,10 @@
-import { reactive, computed } from "vue";
+import { reactive, computed, ref } from "vue";
 import { defineStore } from "pinia";
 
 import INote from "@/interface/INote";
 
 export const useNoteStore = defineStore("note", () => {
+	const currentTheme = ref<"emerald" | "night">("emerald");
 	const notes: INote[] = reactive<INote[]>([
 		{
 			id: 1,
@@ -69,8 +70,13 @@ export const useNoteStore = defineStore("note", () => {
 		return notes.splice(index, 1);
 	}
 
-	const noteCount = computed(() => {
-		return notes.length;
+	function updateCurrentTheme(themeName: "emerald" | "night") {
+		currentTheme.value = themeName;
+		document.documentElement.setAttribute("data-theme", currentTheme.value);
+	}
+
+	const getCurrentTheme = computed(() => {
+		return currentTheme.value;
 	});
 
 	const todoNotes = computed(() => {
@@ -89,9 +95,12 @@ export const useNoteStore = defineStore("note", () => {
 		return notes.filter((note) => note.status === "Completed");
 	});
 
+	const allNotes = computed(() => {
+		return notes;
+	});
+
 	return {
-		notes,
-		noteCount,
+		allNotes,
 		todoNotes,
 		pendingNotes,
 		completedNotes,
@@ -99,5 +108,7 @@ export const useNoteStore = defineStore("note", () => {
 		removeNote,
 		updateNote,
 		createNewNote,
+		getCurrentTheme,
+		updateCurrentTheme,
 	};
 });
