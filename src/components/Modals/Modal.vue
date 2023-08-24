@@ -8,7 +8,7 @@
 				✕
 			</button>
 			<h3 class="font-bold text-lg text-center">{{ props.modal.title }}</h3>
-			<form class="form-control flex flex-col gap-2">
+			<form class="form-control gap-2">
 				<slot name="body"></slot>
 				<slot name="action">
 					<button

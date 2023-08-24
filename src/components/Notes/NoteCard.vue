@@ -1,7 +1,7 @@
 <template>
 	<div
 		draggable="true"
-		class="card card-bordered bg-white p-4 text-sm cursor-move max-w-xs"
+		:class="`card card-bordered ${bgColor} p-4 text-sm cursor-move max-w-xs shadow-md`"
 	>
 		<div class="card-title font-bold pb-2 justify-between">
 			<span>{{ props.note.title }}</span>
@@ -28,8 +28,8 @@
 			<Menu
 				v-if="showMenu"
 				class="absolute right-1 top-11"
-				@on-edit="handleAction('edit')"
-				@on-delete="handleAction('delete')"
+				@on-edit="emit('onEdit')"
+				@on-delete="emit('onDelete')"
 			></Menu>
 		</div>
 		<p class="pb-4">{{ props.note.note }}</p>
@@ -56,26 +56,29 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, computed } from "vue";
 
 import INote from "@/interface/INote";
 
-import Menu from "@/components/Menus.vue";
+import Menu from "@/components/Form/Menus.vue";
+
+import { useNoteStore } from "@/store/NoteStore";
+const noteStore = useNoteStore();
 
 interface Props {
 	note: INote;
 }
 const props = defineProps<Props>();
 const emit = defineEmits<{
-	(e: "onEdit", note: INote): void;
-	(e: "onDelete", note: INote): void;
+	(e: "onEdit"): void;
+	(e: "onDelete"): void;
 }>();
 
-const showMenu = ref<boolean>(false);
+const bgColor = computed(() => {
+	return noteStore.getCurrentTheme === "emerald"
+		? "bg-white"
+		: "bg-primary-content";
+});
 
-function handleAction(actionType: "edit" | "delete") {
-	if (actionType === "edit") emit("onEdit", props.note);
-	else emit("onDelete", props.note);
-	showMenu.value = false;
-}
+const showMenu = ref<boolean>(false);
 </script>

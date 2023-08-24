@@ -1,5 +1,5 @@
 <template>
-	<Modal v-model="showModal" :modal="{ title: 'Delete Note' }">
+	<Modal v-model="showDeleteModal" :modal="{ title: 'Delete Note' }">
 		<template #body>
 			<div class="card bg-base-100">
 				<div class="card-body items-center text-center">
@@ -8,7 +8,7 @@
 			</div>
 		</template>
 		<template #action>
-			<button type="button" class="btn btn-warning" @click="$emit('onDelete')">
+			<button type="button" class="btn btn-warning" @click="emit('onDelete')">
 				<svg
 					xmlns="http://www.w3.org/2000/svg"
 					fill="none"
@@ -32,18 +32,24 @@
 <script setup lang="ts">
 import Modal from "@/components/Modals/Modal.vue";
 
-import { ref, watch } from "vue";
-const showModal = ref<boolean>(false);
+import { computed } from "vue";
 
 interface Props {
 	message: string;
-	showDeleteModal: boolean;
+	modelValue: boolean;
 }
-watch(
-	() => props.showDeleteModal,
-	(modalValue: boolean) => {
-		showModal.value = modalValue;
-	}
-);
 const props = defineProps<Props>();
+const emit = defineEmits<{
+	(e: "onDelete"): void;
+	(e: "update:modelValue", value: boolean): void;
+}>();
+
+const showDeleteModal = computed({
+	get: function () {
+		return props.modelValue;
+	},
+	set: function (value: boolean) {
+		emit("update:modelValue", value);
+	},
+});
 </script>

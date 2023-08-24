@@ -1,10 +1,5 @@
 <template>
-	<Modal
-		:modal="{ title: 'Edit Note' }"
-		v-model="showModal"
-		@onModalClick="handleSave"
-		@onModalClose="showModal = false"
-	>
+	<Modal :modal="{ title: 'Edit Note' }" v-model="showEditModal">
 		<template #body>
 			<label for="title" class="label-text">Title</label>
 			<input
@@ -38,7 +33,7 @@
 				type="button"
 				class="btn btn-primary"
 				:disabled="isDisabled"
-				@click.prevent="handleSave"
+				@click="emit('onSave', internalNote)"
 			>
 				Edit
 			</button>
@@ -50,7 +45,7 @@
 /**
  * Vue
  */
-import { computed, ref, ComputedRef, watch } from "vue";
+import { computed, ref, ComputedRef } from "vue";
 
 /**
  * Interface
@@ -62,11 +57,11 @@ import IStatus from "@/interface/IStatus";
  * Component
  */
 import Modal from "@/components/Modals/Modal.vue";
-import Dropdown from "@/components/Dropdown.vue";
+import Dropdown from "@/components/Form/Dropdown.vue";
 
 interface Props {
 	editNote: INote;
-	showEditModal: boolean;
+	modelValue: boolean;
 }
 const props = withDefaults(defineProps<Props>(), {
 	editNote: () => ({
@@ -77,16 +72,18 @@ const props = withDefaults(defineProps<Props>(), {
 		createdAt: "",
 		updatedAt: "",
 	}),
-	showEditModal: false,
+	modelValue: false,
 });
 
-const emit = defineEmits<(e: "onEditNote", note: INote) => void>();
+const emit = defineEmits<{
+	(e: "onSave", note: INote): void;
+	(e: "update:modelValue", value: boolean): void;
+}>();
 const selectStatus = ref<IStatus[]>([
 	{ _selected: false, label: "Todo" },
 	{ _selected: false, label: "Inprogress" },
 	{ _selected: false, label: "Completed" },
 ]);
-const showModal = ref<boolean>(false);
 
 const isDisabled: ComputedRef<boolean> = computed(() => {
 	return !(
@@ -94,12 +91,14 @@ const isDisabled: ComputedRef<boolean> = computed(() => {
 	);
 });
 
-watch(
-	() => props.showEditModal,
-	(modalValue: boolean) => {
-		showModal.value = modalValue;
-	}
-);
+const showEditModal = computed({
+	get: function () {
+		return props.modelValue;
+	},
+	set: function (value: boolean) {
+		emit("update:modelValue", value);
+	},
+});
 
 const internalNote = computed(() => {
 	return {
@@ -110,9 +109,5 @@ const internalNote = computed(() => {
 
 function handleStatusChange(status: any): void {
 	console.log(status);
-}
-
-function handleSave(): void {
-	emit("onEditNote", internalNote.value);
 }
 </script>

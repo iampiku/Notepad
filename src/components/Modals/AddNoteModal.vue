@@ -1,35 +1,11 @@
 <template>
-	<button
-		type="button"
-		@click="showModal = true"
-		class="btn btn-circle btn-primary cursor-pointer absolute bottom-6 right-6"
-	>
-		<div class="tooltip" data-tip="Add Notes">
-			<svg
-				xmlns="http://www.w3.org/2000/svg"
-				fill="none"
-				viewBox="0 0 24 24"
-				stroke-width="2"
-				stroke="currentColor"
-				class="w-6 h-6"
-			>
-				<path
-					stroke-linecap="round"
-					stroke-linejoin="round"
-					d="M12 9v6m3-3H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"
-				/>
-			</svg>
-		</div>
-	</button>
-
 	<Modal
-		:modal="modalSetup"
-		v-model="showModal"
-		@onModalClick="handleSubmit"
-		@onModalClose="handleModalClose"
+		:modal="{ title: 'Add Note' }"
+		v-model="showAddModal"
+		@onModalClose="resetModal"
 	>
 		<template #body>
-			<label for="title" class="label-text">Title</label>
+			<label for="title" class="label-text font-semibold">Title</label>
 			<input
 				id="title"
 				type="text"
@@ -51,7 +27,7 @@
 				name="note"
 				id="note"
 				cols="30"
-				rows="10"
+				rows="6"
 				class="textarea input-bordered w-full"
 				v-model.trim="note"
 			></textarea>
@@ -61,7 +37,7 @@
 				type="button"
 				class="btn btn-primary"
 				:disabled="isDisabled"
-				@click.prevent="handleSubmit"
+				@click="handleSubmit"
 			>
 				Add Note
 			</button>
@@ -79,29 +55,44 @@ import { ref, computed } from "vue";
  * Interface
  */
 import INote from "@/interface/INote";
-import IStats from "@/interface/IStatus";
+import IStatus from "@/interface/IStatus";
 
 /**
  * Component
  */
 import Modal from "@/components/Modals/Modal.vue";
-import Dropdown from "@/components/Dropdown.vue";
+import Dropdown from "@/components/Form/Dropdown.vue";
 
 /**
  * State
  */
 const title = ref<string>("");
 const note = ref<string>("");
-const showModal = ref<boolean>(false);
-const selectedStatus = ref<IStats>();
-const modalSetup = ref<{ title: string }>({ title: "Add Note" });
-const status = ref<IStats[]>([
+const selectedStatus = ref<IStatus>();
+const status = ref<IStatus[]>([
 	{ _selected: true, label: "Todo" },
 	{ _selected: false, label: "Inprogress" },
 	{ _selected: false, label: "Completed" },
 ]);
 
-const emit = defineEmits<(e: "onAddNote", note: INote) => void>();
+const emit = defineEmits<{
+	(e: "onAddNote", note: INote): void;
+	(e: "update:modelValue", value: boolean): void;
+}>();
+
+interface Props {
+	// selectedStatus: IStatus;
+	modelValue: boolean;
+}
+const props = defineProps<Props>();
+const showAddModal = computed({
+	get: function () {
+		return props.modelValue;
+	},
+	set: function (value: boolean) {
+		emit("update:modelValue", value);
+	},
+});
 
 const isDisabled = computed(() => {
 	return !(title.value.length > 3 && note.value.length > 5);
@@ -118,9 +109,8 @@ function handleSubmit(): void {
 	});
 	title.value = "";
 	note.value = "";
-	showModal.value = false;
 }
-function handleModalClose(): void {
+function resetModal(): void {
 	title.value = "";
 	note.value = "";
 }

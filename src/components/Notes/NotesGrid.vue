@@ -1,17 +1,17 @@
 <template>
 	<div
 		id="todo-container"
-		class="grid gap-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4 bg-slate-50 p-6 my-20 rounded-lg"
+		class="grid gap-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4 bg-slate-50 p-6 my-20 md:mx-10 rounded-lg"
 	>
 		<div
 			:key="index"
 			v-for="(note, index) in notes"
-			:class="`card card-bordered  ${note.bgColor}`"
+			:class="`card card-bordered ${note.bgColor}`"
 		>
-			<div class="card-title flex justify-between px-7 pt-6">
-				<span class="font-semibold text-base"
+			<div class="card-title flex justify-between px-5 pt-6">
+				<span class="font-semibold text-lg"
 					>{{ note.title }}
-					<span class="badge badge-sm rounded-xl badge-accent">
+					<span class="badge badge-sm rounded-xl badge-accent font-bold">
 						{{ note.notes.length }}</span
 					></span
 				>
@@ -19,7 +19,7 @@
 					<button
 						type="button"
 						class="btn btn-circle btn-xs btn-ghost"
-						@click="emit('onAdd')"
+						@click="emit('onAdd', note.title)"
 					>
 						<svg
 							xmlns="http://www.w3.org/2000/svg"
@@ -51,8 +51,8 @@
 				>
 					<NoteCard
 						:note="filteredNote"
-						@on-edit="handleEdit"
-						@on-delete="handleDelete"
+						@on-edit="emit('onEdit', filteredNote)"
+						@on-delete="emit('onDelete', filteredNote)"
 					></NoteCard>
 				</div>
 			</div>
@@ -83,31 +83,35 @@ import { useNoteStore } from "@/store/NoteStore";
 const noteStore = useNoteStore();
 
 const emit = defineEmits<{
-	(e: "onAdd"): void;
+	(e: "onAdd", status: string): void;
 	(e: "onEdit", note: INote): void;
 	(e: "onDelete", note: INote): void;
 }>();
+
+const colorShade = computed(() => {
+	return noteStore.getCurrentTheme === "emerald" ? "100" : "900";
+});
 
 const notes = computed(() => {
 	return [
 		{
 			title: "Todo",
-			bgColor: "bg-gray-100",
+			bgColor: `bg-gray-${colorShade.value}`,
 			notes: noteStore.todoNotes,
 		},
 		{
 			title: "In Progress",
-			bgColor: "bg-blue-100",
+			bgColor: `bg-blue-${colorShade.value}`,
 			notes: noteStore.inProgressNotes,
 		},
 		{
 			title: "Pending",
-			bgColor: "bg-purple-100",
+			bgColor: `bg-purple-${colorShade.value}`,
 			notes: noteStore.pendingNotes,
 		},
 		{
 			title: "Completed",
-			bgColor: "bg-green-100",
+			bgColor: `bg-green-${colorShade.value}`,
 			notes: noteStore.completedNotes,
 		},
 	];
@@ -124,7 +128,9 @@ function handleDrag(event: DragEvent, note: INote) {
 function onDrop(event: DragEvent, updatedStatus: string) {
 	if (event.dataTransfer) {
 		const noteId = event.dataTransfer.getData("noteId");
-		const note = noteStore.notes.find((note) => note.id === parseInt(noteId));
+		const note = noteStore.allNotes.find(
+			(note) => note.id === parseInt(noteId)
+		);
 		if (note) {
 			switch (updatedStatus) {
 				case "Todo":
@@ -143,13 +149,5 @@ function onDrop(event: DragEvent, updatedStatus: string) {
 			noteStore.updateNote(note);
 		}
 	}
-}
-
-function handleEdit(note: INote) {
-	console.log(note);
-}
-
-function handleDelete(note: INote) {
-	noteStore.removeNote(note.id);
 }
 </script>
