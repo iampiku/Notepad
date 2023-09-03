@@ -1,12 +1,29 @@
 <template>
 	<div
 		id="todo-container"
+		:class="[
+			noteStore.getCurrentTheme === 'night' ? 'bg-slate-700' : 'bg-slate-50',
+		]"
 		class="grid gap-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4 bg-slate-50 p-6 my-20 md:mx-10 rounded-lg"
 	>
 		<div
 			:key="index"
-			v-for="(note, index) in notes"
-			:class="`card card-bordered ${note.bgColor}`"
+			v-for="(note, index) in notesContainer"
+			class="card"
+			:class="{
+				'bg-gray-100': note.title === 'Todo',
+				'bg-blue-100': note.title === 'In Progress',
+				'bg-purple-100': note.title === 'Pending',
+				'bg-green-100': note.title === 'Completed',
+				'bg-gray-900':
+					note.title === 'Todo' && noteStore.getCurrentTheme === 'night',
+				'bg-blue-950':
+					note.title === 'In Progress' && noteStore.getCurrentTheme === 'night',
+				'bg-purple-950':
+					note.title === 'Pending' && noteStore.getCurrentTheme === 'night',
+				'bg-green-950':
+					note.title === 'Completed' && noteStore.getCurrentTheme === 'night',
+			}"
 		>
 			<div class="card-title flex justify-between px-5 pt-6">
 				<span class="font-semibold text-lg"
@@ -88,30 +105,22 @@ const emit = defineEmits<{
 	(e: "onDelete", note: INote): void;
 }>();
 
-const colorShade = computed(() => {
-	return noteStore.getCurrentTheme === "emerald" ? "100" : "900";
-});
-
-const notes = computed(() => {
+const notesContainer = computed(() => {
 	return [
 		{
 			title: "Todo",
-			bgColor: `bg-gray-${colorShade.value}`,
 			notes: noteStore.todoNotes,
 		},
 		{
 			title: "In Progress",
-			bgColor: `bg-blue-${colorShade.value}`,
 			notes: noteStore.inProgressNotes,
 		},
 		{
 			title: "Pending",
-			bgColor: `bg-purple-${colorShade.value}`,
 			notes: noteStore.pendingNotes,
 		},
 		{
 			title: "Completed",
-			bgColor: `bg-green-${colorShade.value}`,
 			notes: noteStore.completedNotes,
 		},
 	];

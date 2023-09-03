@@ -14,7 +14,7 @@
 				viewBox="0 0 24 24"
 				stroke-width="1.5"
 				stroke="currentColor"
-				class="swap-off fill-current w-6 h-6"
+				class="swap-off fill-current w-8"
 			>
 				<path
 					stroke-linecap="round"
@@ -28,7 +28,7 @@
 				viewBox="0 0 24 24"
 				stroke-width="1.5"
 				stroke="currentColor"
-				class="swap-on fill-current w-6 h-6"
+				class="swap-on fill-current w-8"
 			>
 				<path
 					stroke-linecap="round"

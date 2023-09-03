@@ -1,5 +1,10 @@
 <template>
-	<ul class="bg-slate-100 px-3 py-1 border-2 rounded-xl cursor-pointer">
+	<ul
+		:class="[
+			noteStore.getCurrentTheme === 'emerald' ? 'bg-slate-100' : 'bg-slate-800',
+		]"
+		class="px-3 py-1 border-2 rounded-xl cursor-pointer"
+	>
 		<li>
 			<a
 				data-tip="Edit"
@@ -48,5 +53,7 @@
 </template>
 
 <script setup lang="ts">
+import { useNoteStore } from "@/store/NoteStore";
+const noteStore = useNoteStore();
 const emit = defineEmits<{ (e: "onEdit"): void; (e: "onDelete"): void }>();
 </script>

@@ -16,7 +16,10 @@
 			v-model="showDeleteModal"
 			@onDelete="handleDeleteNote"
 		/>
-		<!-- <ThemeSwitch @onThemeChange="handleThemeSwitch" /> -->
+		<ThemeSwitch
+			class="absolute top-6 right-8"
+			@onThemeChange="handleThemeSwitch"
+		/>
 	</main>
 </template>
 
@@ -30,7 +33,7 @@ import { useNoteStore } from "@/store/NoteStore";
 const noteStore = useNoteStore();
 
 import NotesGrid from "@/components/Notes/NotesGrid.vue";
-// import ThemeSwitch from "@/components/ThemeSwitch.vue";
+import ThemeSwitch from "@/components/ThemeSwitch.vue";
 import AddNoteModal from "@/components/Modals/AddNoteModal.vue";
 import EditNoteModal from "@/components/Modals/EditNoteModal.vue";
 import DeleteNoteModal from "@/components/Modals/DeleteNoteModal.vue";
@@ -74,7 +77,7 @@ function handleDeleteNote(note?: INote) {
 	}
 }
 
-// function handleThemeSwitch(isDark: boolean) {
-// 	noteStore.updateCurrentTheme(isDark ? "night" : "emerald");
-// }
+function handleThemeSwitch(isDark: boolean) {
+	noteStore.updateCurrentTheme(isDark ? "night" : "emerald");
+}
 </script>

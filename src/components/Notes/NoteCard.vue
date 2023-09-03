@@ -1,7 +1,10 @@
 <template>
 	<div
 		draggable="true"
-		:class="`card card-bordered ${bgColor} p-4 text-sm cursor-move max-w-xs shadow-md`"
+		:class="{
+			'bg-slate-800': noteStore.getCurrentTheme === 'night',
+		}"
+		class="card card-compact bg-slate-100 p-4 text-sm cursor-move max-w-xs shadow-md"
 	>
 		<div class="card-title font-bold pb-2 justify-between">
 			<span>{{ props.note.title }}</span>
@@ -28,8 +31,14 @@
 			<Menu
 				v-if="showMenu"
 				class="absolute right-1 top-11"
-				@on-edit="emit('onEdit')"
-				@on-delete="emit('onDelete')"
+				@on-edit="
+					emit('onEdit');
+					showMenu = false;
+				"
+				@on-delete="
+					emit('onDelete');
+					showMenu = false;
+				"
 			></Menu>
 		</div>
 		<p class="pb-4">{{ props.note.note }}</p>
@@ -56,11 +65,11 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from "vue";
+import { ref } from "vue";
 
 import INote from "@/interface/INote";
 
-import Menu from "@/components/Form/Menus.vue";
+import Menu from "@/components/form/Menus.vue";
 
 import { useNoteStore } from "@/store/NoteStore";
 const noteStore = useNoteStore();
@@ -73,12 +82,6 @@ const emit = defineEmits<{
 	(e: "onEdit"): void;
 	(e: "onDelete"): void;
 }>();
-
-const bgColor = computed(() => {
-	return noteStore.getCurrentTheme === "emerald"
-		? "bg-white"
-		: "bg-primary-content";
-});
 
 const showMenu = ref<boolean>(false);
 </script>
