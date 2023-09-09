@@ -1,4 +1,4 @@
-import { reactive, computed, ref } from "vue";
+import { reactive, computed, ref, onMounted } from "vue";
 import { defineStore } from "pinia";
 
 import INote from "@/interface/INote";
@@ -56,6 +56,12 @@ export const useNoteStore = defineStore("note", () => {
 		},
 	]);
 
+	onMounted(() => {
+		currentTheme.value =
+			(localStorage.getItem("theme") as "emerald" | "night") ?? "emerald";
+		document.documentElement.setAttribute("data-theme", currentTheme.value);
+	});
+
 	function createNewNote(note: INote): void {
 		notes.push(note);
 	}
@@ -66,12 +72,19 @@ export const useNoteStore = defineStore("note", () => {
 		return note.id;
 	}
 
-	function removeNote(index: number): INote[] {
-		return notes.splice(index, 1);
+	function removeNote(noteId: number): INote[] {
+		const noteIndex = notes.findIndex((note) => note.id === noteId);
+		return notes.splice(noteIndex, 1);
 	}
 
 	function updateCurrentTheme(themeName: "emerald" | "night") {
-		currentTheme.value = themeName;
+		if (localStorage.length === 0)
+			localStorage.setItem("theme", themeName || "emerald");
+		else {
+			localStorage.setItem("theme", themeName);
+			currentTheme.value = themeName;
+		}
+
 		document.documentElement.setAttribute("data-theme", currentTheme.value);
 	}
 
