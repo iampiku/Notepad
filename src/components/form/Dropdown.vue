@@ -3,7 +3,11 @@
 		id="select"
 		v-model="selectedItem"
 		@change="handleSelection"
-		:class="`select select-${props.selectionType} btn-${props.size}`"
+		:class="{
+			'btn-sm': props.size === 'sm',
+			'select-bordered': props.selectionType === 'bordered',
+		}"
+		class="select"
 	>
 		<option
 			:key="index"

@@ -49,7 +49,7 @@
 /**
  * Vue
  */
-import { ref, computed } from "vue";
+import { ref, computed, watch } from "vue";
 
 /**
  * Interface
@@ -60,18 +60,18 @@ import IStatus from "@/interface/IStatus";
 /**
  * Component
  */
-import Modal from "@/components/Modals/Modal.vue";
-import Dropdown from "@/components/Form/Dropdown.vue";
+import Modal from "@/components/modals/Modal.vue";
+import Dropdown from "@/components/form/Dropdown.vue";
 
 /**
  * State
  */
 const title = ref<string>("");
 const note = ref<string>("");
-const selectedStatus = ref<IStatus>();
 const status = ref<IStatus[]>([
 	{ _selected: true, label: "Todo" },
 	{ _selected: false, label: "Inprogress" },
+	{ _selected: false, label: "Pending" },
 	{ _selected: false, label: "Completed" },
 ]);
 
@@ -81,10 +81,21 @@ const emit = defineEmits<{
 }>();
 
 interface Props {
-	// selectedStatus: IStatus;
+	status: string;
 	modelValue: boolean;
 }
 const props = defineProps<Props>();
+
+watch(
+	() => props.status,
+	(selectedStatus) => {
+		status.value.forEach((item) => {
+			if (item.label === selectedStatus) item._selected = true;
+			else item._selected = false;
+		});
+	}
+);
+
 const showAddModal = computed({
 	get: function () {
 		return props.modelValue;
@@ -103,19 +114,22 @@ function handleSubmit(): void {
 		id: Date.now(),
 		title: title.value,
 		note: note.value,
-		status: selectedStatus.value?.label ?? "Todo",
+		status: status.value.find((item) => item._selected)?.label ?? "Todo",
 		createdAt: new Date().toLocaleString(),
 		updatedAt: new Date().toLocaleString(),
 	});
-	title.value = "";
-	note.value = "";
+	resetModal();
 }
+
 function resetModal(): void {
 	title.value = "";
 	note.value = "";
 }
 
-function handleStatusChange(note: any) {
-	selectedStatus.value = note;
+function handleStatusChange(selectedStatus: any) {
+	status.value.forEach((item) => {
+		if (item.label === selectedStatus?.label) item._selected = true;
+		else item._selected = false;
+	});
 }
 </script>

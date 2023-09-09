@@ -36,7 +36,7 @@
 					<button
 						type="button"
 						class="btn btn-circle btn-xs btn-ghost"
-						@click="emit('onAdd', note.title)"
+						@click="handleAdd(note.title)"
 					>
 						<svg
 							xmlns="http://www.w3.org/2000/svg"
@@ -91,7 +91,7 @@ import INote from "@/interface/INote";
 /**
  * Component
  */
-import NoteCard from "@/components/Notes/NoteCard.vue";
+import NoteCard from "@/components/notes/NoteCard.vue";
 
 /**
  * Store
@@ -158,5 +158,10 @@ function onDrop(event: DragEvent, updatedStatus: string) {
 			noteStore.updateNote(note);
 		}
 	}
+}
+
+function handleAdd(title: string) {
+	title = title === "In Progress" ? "Inprogress" : title;
+	emit("onAdd", title);
 }
 </script>

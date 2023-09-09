@@ -45,7 +45,7 @@
 /**
  * Vue
  */
-import { computed, ref, ComputedRef } from "vue";
+import { computed, ref, ComputedRef, watch } from "vue";
 
 /**
  * Interface
@@ -56,8 +56,8 @@ import IStatus from "@/interface/IStatus";
 /**
  * Component
  */
-import Modal from "@/components/Modals/Modal.vue";
-import Dropdown from "@/components/Form/Dropdown.vue";
+import Modal from "@/components/modals/Modal.vue";
+import Dropdown from "@/components/form/Dropdown.vue";
 
 interface Props {
 	editNote: INote;
@@ -79,11 +79,22 @@ const emit = defineEmits<{
 	(e: "onSave", note: INote): void;
 	(e: "update:modelValue", value: boolean): void;
 }>();
+
 const selectStatus = ref<IStatus[]>([
 	{ _selected: false, label: "Todo" },
 	{ _selected: false, label: "Inprogress" },
 	{ _selected: false, label: "Completed" },
+	{ _selected: false, label: "Pending" },
 ]);
+watch(
+	() => props.editNote.status,
+	(selectedStatus) => {
+		selectStatus.value.forEach((status) => {
+			if (status.label === selectedStatus) status._selected = true;
+			else status._selected = false;
+		});
+	}
+);
 
 const isDisabled: ComputedRef<boolean> = computed(() => {
 	return !(
@@ -107,7 +118,10 @@ const internalNote = computed(() => {
 	};
 });
 
-function handleStatusChange(status: any): void {
-	console.log(status);
+function handleStatusChange(selectedStatus: any): void {
+	selectStatus.value.forEach((status) => {
+		if (status.label === selectedStatus) status._selected = true;
+		else status._selected = false;
+	});
 }
 </script>

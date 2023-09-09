@@ -5,7 +5,11 @@
 			@onEdit="handleEditNote"
 			@onDelete="handleDeleteNote"
 		/>
-		<AddNoteModal v-model="showAddModal" @on-add-note="handleAddNote" />
+		<AddNoteModal
+			:status="status"
+			v-model="showAddModal"
+			@on-add-note="handleAddNote"
+		/>
 		<EditNoteModal
 			:editNote="editNote"
 			v-model="showEditModal"
@@ -24,27 +28,37 @@
 </template>
 
 <script setup lang="ts">
+/**
+ * Vue
+ */
 import { ref } from "vue";
 
+/**
+ * Interface
+ */
 import INote from "@/interface/INote";
-// import IStatus from "@/interface/IStatus";
 
+/**
+ * Interface
+ */
 import { useNoteStore } from "@/store/NoteStore";
 const noteStore = useNoteStore();
 
-import NotesGrid from "@/components/Notes/NotesGrid.vue";
+/**
+ * Components
+ */
 import ThemeSwitch from "@/components/ThemeSwitch.vue";
-import AddNoteModal from "@/components/Modals/AddNoteModal.vue";
-import EditNoteModal from "@/components/Modals/EditNoteModal.vue";
-import DeleteNoteModal from "@/components/Modals/DeleteNoteModal.vue";
+import NotesGrid from "@/components/notes/NotesGrid.vue";
+import AddNoteModal from "@/components/modals/AddNoteModal.vue";
+import EditNoteModal from "@/components/modals/EditNoteModal.vue";
+import DeleteNoteModal from "@/components/modals/DeleteNoteModal.vue";
 
+const status = ref<string>("Todo");
 const showAddModal = ref<boolean>(false);
-// const selectedStatus = ref<IStatus>();
 function handleAddNote(eventValue: string | INote) {
 	if (typeof eventValue === "string") {
-		// selectedStatus.value = { _selected: true, label: eventValue };
+		status.value = eventValue;
 		showAddModal.value = true;
-		console.log(eventValue);
 	} else {
 		noteStore.createNewNote(eventValue);
 		showAddModal.value = false;
