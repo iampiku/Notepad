@@ -1,10 +1,10 @@
 <template>
-	<div
+	<section
 		id="todo-container"
 		:class="[
 			noteStore.getCurrentTheme === 'night' ? 'bg-slate-700' : 'bg-slate-50',
 		]"
-		class="grid gap-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4 bg-slate-50 p-6 my-20 md:mx-10 rounded-lg"
+		class="grid gap-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4 bg-slate-50 p-6 my-20 md:mx-10 rounded-lg min-w-min"
 	>
 		<div
 			:key="index"
@@ -35,23 +35,11 @@
 				<div class="tooltip" data-tip="Add Note">
 					<button
 						type="button"
+						name="add-note"
 						class="btn btn-circle btn-xs btn-ghost"
 						@click="handleAdd(note.title)"
 					>
-						<svg
-							xmlns="http://www.w3.org/2000/svg"
-							fill="none"
-							viewBox="0 0 24 24"
-							stroke-width="1.5"
-							stroke="currentColor"
-							class="w-6"
-						>
-							<path
-								stroke-linecap="round"
-								stroke-linejoin="round"
-								d="M12 4.5v15m7.5-7.5h-15"
-							/>
-						</svg>
+						<AddIcon />
 					</button>
 				</div>
 			</div>
@@ -74,7 +62,7 @@
 				</div>
 			</div>
 		</div>
-	</div>
+	</section>
 </template>
 
 <script setup lang="ts">
@@ -91,6 +79,7 @@ import INote from "@/interface/INote";
 /**
  * Component
  */
+import AddIcon from "@/components/icons/Add.vue";
 import NoteCard from "@/components/notes/NoteCard.vue";
 
 /**

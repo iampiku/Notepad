@@ -7,8 +7,8 @@
 				name="title"
 				id="title"
 				autocomplete="off"
-				class="input input-bordered w-full"
 				v-model="internalNote.title"
+				class="input input-bordered w-full"
 			/>
 			<label for="status" class="label-text">Status</label>
 			<Dropdown
@@ -17,20 +17,21 @@
 				:items="selectStatus"
 				selectionType="bordered"
 				@onSelection="handleStatusChange"
-			></Dropdown>
+			/>
 			<label for="note" class="label-text">Note</label>
 			<textarea
 				name="note"
 				id="note"
 				cols="30"
 				rows="10"
-				class="textarea input-bordered w-full"
 				v-model="internalNote.note"
+				class="textarea input-bordered w-full"
 			></textarea>
 		</template>
 		<template #action>
 			<button
 				type="button"
+				name="delete-note"
 				class="btn btn-primary"
 				:disabled="isDisabled"
 				@click="emit('onSave', internalNote)"

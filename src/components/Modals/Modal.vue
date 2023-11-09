@@ -13,6 +13,7 @@
 				<slot name="action">
 					<button
 						type="button"
+						name="model-action"
 						class="btn btn-primary"
 						:disabled="modal.disabled"
 						@click.prevent="$emit('onModalClick')"

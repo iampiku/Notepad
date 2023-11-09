@@ -8,7 +8,12 @@
 			</div>
 		</template>
 		<template #action>
-			<button type="button" class="btn btn-warning" @click="emit('onDelete')">
+			<button
+				type="button"
+				name="delete-note"
+				class="btn btn-warning"
+				@click="emit('onDelete')"
+			>
 				<svg
 					xmlns="http://www.w3.org/2000/svg"
 					fill="none"
@@ -30,7 +35,7 @@
 </template>
 
 <script setup lang="ts">
-import Modal from "@/components/Modals/Modal.vue";
+import Modal from "@/components/modals/Modal.vue";
 
 import { computed } from "vue";
 

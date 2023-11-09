@@ -10,6 +10,7 @@
 			<span>{{ props.note.title }}</span>
 			<button
 				type="button"
+				name="menu"
 				class="btn btn-xs btn-ghost btn-circle"
 				@click="showMenu = !showMenu"
 			>

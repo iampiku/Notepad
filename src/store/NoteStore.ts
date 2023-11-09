@@ -1,60 +1,30 @@
-import { reactive, computed, ref, onMounted } from "vue";
+import { computed, ref, onMounted } from "vue";
 import { defineStore } from "pinia";
 
 import INote from "@/interface/INote";
 
+import useNotes from "@/composables/useNotes";
+
 export const useNoteStore = defineStore("note", () => {
 	const currentTheme = ref<"emerald" | "night">("emerald");
-	const notes: INote[] = reactive<INote[]>([
-		{
-			id: 1,
-			note: "Learn about Java and SpringBoot and use MySQL as Database",
-			title: "Backend Development",
-			createdAt: "2023-08-23T08:00:00Z",
-			updatedAt: "2023-08-23T08:00:00Z",
-			status: "Inprogress",
-		},
-		{
-			id: 2,
-			note: "Consectetur adipiscing elit.",
-			title: "Note 2",
-			createdAt: "2023-08-23T09:00:00Z",
-			updatedAt: "2023-08-23T09:00:00Z",
-			status: "Completed",
-		},
-		{
-			id: 3,
-			note: "Lorem ipsum dolor sit amet.",
-			title: "Note 1",
-			createdAt: "2023-08-23T08:00:00Z",
-			updatedAt: "2023-08-23T08:00:00Z",
-			status: "Todo",
-		},
-		{
-			id: 4,
-			note: "Consectetur adipiscing elit.",
-			title: "Note 2",
-			createdAt: "2023-08-23T09:00:00Z",
-			updatedAt: "2023-08-23T09:00:00Z",
-			status: "Pending",
-		},
-		{
-			id: 5,
-			note: "Lorem ipsum dolor sit amet.",
-			title: "Note 1",
-			createdAt: "2023-08-23T08:00:00Z",
-			updatedAt: "2023-08-23T08:00:00Z",
-			status: "Todo",
-		},
-		{
-			id: 6,
-			note: "Consectetur adipiscing elit.",
-			title: "Note 2",
-			createdAt: "2023-08-23T09:00:00Z",
-			updatedAt: "2023-08-23T09:00:00Z",
-			status: "Completed",
-		},
-	]);
+	const loading = ref<boolean>(false);
+	// const errorMessage = ref<string>("");
+	const notes = ref<INote[]>([]);
+
+	const { fetchNotes, addNote, deleteNote, updateNote } = useNotes();
+
+	async function populateNotes(params: { user_id: number }) {
+		loading.value = true;
+		try {
+			const response = await fetchNotes(params);
+			if (Array.isArray(response)) notes.value = response;
+			else throw new Error(response?.message || "Oops! something wend wrong");
+		} catch (error) {
+			console.error(error);
+		} finally {
+			loading.value = false;
+		}
+	}
 
 	onMounted(() => {
 		currentTheme.value =
@@ -62,19 +32,40 @@ export const useNoteStore = defineStore("note", () => {
 		document.documentElement.setAttribute("data-theme", currentTheme.value);
 	});
 
-	function createNewNote(note: INote): void {
-		notes.push(note);
+	async function createNewNote(note: INote, user_id: string) {
+		loading.value = true;
+		try {
+			const response = await addNote({ note, user_id });
+			if (response) throw new Error(response.message);
+		} catch (error) {
+			console.error(error);
+		} finally {
+			loading.value = false;
+		}
 	}
 
-	function updateNote(note: INote): number {
-		const index = notes.findIndex(({ id }) => id === note.id);
-		notes[index] = note;
-		return note.id;
+	async function update(note: INote, user_id: string) {
+		loading.value = true;
+		try {
+			const response = await updateNote({ note, user_id });
+			if (response) throw new Error(response.message);
+		} catch (error) {
+			console.error(error);
+		} finally {
+			loading.value = false;
+		}
 	}
 
-	function removeNote(noteId: number): INote[] {
-		const noteIndex = notes.findIndex((note) => note.id === noteId);
-		return notes.splice(noteIndex, 1);
+	async function removeNote(noteId: number) {
+		loading.value = true;
+		try {
+			const response = await deleteNote({ id: noteId });
+			if (response) throw new Error(response.message);
+		} catch (error) {
+			console.error(error);
+		} finally {
+			loading.value = false;
+		}
 	}
 
 	function updateCurrentTheme(themeName: "emerald" | "night") {
@@ -84,7 +75,6 @@ export const useNoteStore = defineStore("note", () => {
 			localStorage.setItem("theme", themeName);
 			currentTheme.value = themeName;
 		}
-
 		document.documentElement.setAttribute("data-theme", currentTheme.value);
 	}
 
@@ -93,23 +83,23 @@ export const useNoteStore = defineStore("note", () => {
 	});
 
 	const todoNotes = computed(() => {
-		return notes.filter((note) => note.status === "Todo");
+		return notes.value.filter((note) => note.status === "Todo");
 	});
 
 	const inProgressNotes = computed(() => {
-		return notes.filter((note) => note.status === "Inprogress");
+		return notes.value.filter((note) => note.status === "Inprogress");
 	});
 
 	const pendingNotes = computed(() => {
-		return notes.filter((note) => note.status === "Pending");
+		return notes.value.filter((note) => note.status === "Pending");
 	});
 
 	const completedNotes = computed(() => {
-		return notes.filter((note) => note.status === "Completed");
+		return notes.value.filter((note) => note.status === "Completed");
 	});
 
 	const allNotes = computed(() => {
-		return notes;
+		return notes.value;
 	});
 
 	return {
@@ -119,7 +109,8 @@ export const useNoteStore = defineStore("note", () => {
 		completedNotes,
 		inProgressNotes,
 		removeNote,
-		updateNote,
+		populateNotes,
+		update,
 		createNewNote,
 		getCurrentTheme,
 		updateCurrentTheme,

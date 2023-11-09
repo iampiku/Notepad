@@ -35,6 +35,7 @@
 		<template #action>
 			<button
 				type="button"
+				name="add-note"
 				class="btn btn-primary"
 				:disabled="isDisabled"
 				@click="handleSubmit"
