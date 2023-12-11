@@ -14,7 +14,7 @@
 			<AddNoteModal
 				:status="status"
 				v-model="showAddModal"
-				@on-add-note="handleAddNote"
+				@onAddNote="handleAddNote"
 			/>
 			<EditNoteModal
 				:editNote="editNote"
@@ -55,11 +55,11 @@ const noteStore = useNoteStore();
  * Components
  */
 import ThemeSwitch from "@/components/ThemeSwitch.vue";
-import NotesGrid from "@/components/notes/NotesGrid.vue";
+import NotesGrid from "@/components/Notes/NotesGrid.vue";
 import EmptyNotes from "@/components/icons/EmptyNotes.vue";
-import AddNoteModal from "@/components/modals/AddNoteModal.vue";
-import EditNoteModal from "@/components/modals/EditNoteModal.vue";
-import DeleteNoteModal from "@/components/modals/DeleteNoteModal.vue";
+import AddNoteModal from "@/components/Modals/AddNoteModal.vue";
+import EditNoteModal from "@/components/Modals/EditNoteModal.vue";
+import DeleteNoteModal from "@/components/Modals/DeleteNoteModal.vue";
 
 const status = ref<string>("Todo");
 const showAddModal = ref<boolean>(false);

@@ -61,7 +61,7 @@ import IStatus from "@/interface/IStatus";
 /**
  * Component
  */
-import Modal from "@/components/modals/Modal.vue";
+import Modal from "@/components/Modals/Modal.vue";
 import Dropdown from "@/components/form/Dropdown.vue";
 
 /**

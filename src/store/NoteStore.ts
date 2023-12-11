@@ -18,7 +18,7 @@ export const useNoteStore = defineStore("note", () => {
 		try {
 			const response = await fetchNotes(params);
 			if (Array.isArray(response)) notes.value = response;
-			else throw new Error(response?.message || "Oops! something wend wrong");
+			else throw new Error(response?.message ?? "Oops! something wend wrong");
 		} catch (error) {
 			console.error(error);
 		} finally {

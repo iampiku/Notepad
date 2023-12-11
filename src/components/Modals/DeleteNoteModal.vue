@@ -35,7 +35,7 @@
 </template>
 
 <script setup lang="ts">
-import Modal from "@/components/modals/Modal.vue";
+import Modal from "@/components/Modals/Modal.vue";
 
 import { computed } from "vue";
 

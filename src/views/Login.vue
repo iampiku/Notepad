@@ -22,11 +22,11 @@
 					name="email"
 					v-model="userLogin.password"
 					class="input input-md input-bordered"
-					placeholder="Password"
+					placeholder="password"
 				/>
-				<button type="button" class="btn btn-md" @click="handleLogin">
-					LOGIN
-				</button>
+				<Button :loading="loading" :disabled="false" @click="handleLogin"
+					>Login</Button
+				>
 			</div>
 		</form>
 	</div>
@@ -35,7 +35,12 @@
 <script setup lang="ts">
 import { ref } from "vue";
 
-const userLogin = ref<{ email: string; password: string }>({
+import Button from "@/components/Button.vue";
+
+import useAuth from "@/composables/useAuth";
+const { loading, error, login } = useAuth();
+
+const userLogin = ref({
 	email: "",
 	password: "",
 });

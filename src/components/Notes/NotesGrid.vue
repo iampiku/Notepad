@@ -80,7 +80,7 @@ import INote from "@/interface/INote";
  * Component
  */
 import AddIcon from "@/components/icons/Add.vue";
-import NoteCard from "@/components/notes/NoteCard.vue";
+import NoteCard from "@/components/Notes/NoteCard.vue";
 
 /**
  * Store

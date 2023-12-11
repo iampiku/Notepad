@@ -10,7 +10,8 @@
 					type="text"
 					name="email"
 					v-model="userLogin.email"
-					class="input input-md input-bordered input-primary"
+					autocomplete="off"
+					class="input input-md input-bordered"
 					placeholder="user@email.com"
 				/>
 				<label for="phone" class="label py-0">
@@ -21,8 +22,8 @@
 					type="text"
 					name="phone"
 					v-model="userLogin.phone"
-					class="input input-md input-bordered input-primary"
-					placeholder="00-00000-00"
+					class="input input-md input-bordered"
+					placeholder=""
 				/>
 				<label for="email" class="label py-0">
 					<span class="label-text font-medium text-lg">Password</span>
@@ -32,12 +33,10 @@
 					type="password"
 					name="email"
 					v-model="userLogin.password"
-					class="input input-md input-bordered input-primary"
+					class="input input-md input-bordered"
 					placeholder="Password"
 				/>
-				<button type="button" class="btn btn-md" @click="handleLogin">
-					LOGIN
-				</button>
+				<Button :loading="loading" :disabled="false"> Register </Button>
 			</div>
 		</form>
 	</div>
@@ -46,13 +45,19 @@
 <script setup lang="ts">
 import { ref } from "vue";
 
+import Button from "@/components/Button.vue";
+
+import useAuth from "@/composables/useAuth";
+const { loading, error, signUp } = useAuth();
+
 const userLogin = ref<{ email: string; password: string; phone: string }>({
 	email: "",
 	phone: "",
 	password: "",
 });
 
-function handleLogin() {
-	console.log(userLogin.value);
-}
+// function handleLogin() {
+// 	try {
+// 	} catch {}
+// }
 </script>
