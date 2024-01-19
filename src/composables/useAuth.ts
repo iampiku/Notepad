@@ -3,29 +3,20 @@ import { AuthError } from "@supabase/supabase-js";
 
 import { ref } from "vue";
 
-import type { Auth, Params } from "@/types/Auth";
-
-export default function useAuth(auth: Auth) {
+export default function useAuth() {
 	const loading = ref(false);
 	const errorMessage = ref("");
 	const successMessage = ref("");
 
-	function authAction(params?: Params) {
-		loading.value = true;
-		try {
-			const { error, data } = await supabase.auth.signUp(params);
-			if (error) throw error;
-			successMessage.value = "Registration successful!";
-			errorMessage.value = "";
-			return data;
-		} catch (error) {
-			errorMessage.value =
-				error instanceof AuthError
-					? error.message
-					: "Oops! something went wrong";
-		} finally {
-			loading.value = false;
-		}
+	function setError(error: unknown): void {
+		errorMessage.value =
+			error instanceof AuthError
+				? error.message
+				: "Oops! something went wrong.";
+	}
+
+	function setLoading(value: boolean): void {
+		loading.value = value;
 	}
 
 	async function signUp(params: {
@@ -33,7 +24,7 @@ export default function useAuth(auth: Auth) {
 		phone: string;
 		password: string;
 	}) {
-		loading.value = true;
+		setLoading(true);
 		try {
 			const { error, data } = await supabase.auth.signUp(params);
 			if (error) throw error;
@@ -41,43 +32,34 @@ export default function useAuth(auth: Auth) {
 			errorMessage.value = "";
 			return data;
 		} catch (error) {
-			errorMessage.value =
-				error instanceof AuthError
-					? error.message
-					: "Oops! something went wrong";
+			setError(error);
 		} finally {
-			loading.value = false;
+			setLoading(false);
 		}
 	}
 
 	async function login(params: { email: string; password: string }) {
-		loading.value = true;
+		setLoading(true);
 		try {
 			const { error, data } = await supabase.auth.signInWithPassword(params);
-			console.log(data);
 			if (error) throw error;
+			else return data;
 		} catch (error) {
-			errorMessage.value =
-				error instanceof AuthError
-					? error.message
-					: "Oops! something went wrong";
+			setError(error);
 		} finally {
-			loading.value = false;
+			setLoading(false);
 		}
 	}
 
 	async function signOut() {
-		loading.value = true;
+		setLoading(true);
 		try {
 			const { error } = await supabase.auth.signOut();
 			if (error) throw error;
 		} catch (error) {
-			errorMessage.value =
-				error instanceof AuthError
-					? error.message
-					: "Oops! something went wrong";
+			setError(error);
 		} finally {
-			loading.value = false;
+			setLoading(false);
 		}
 	}
 

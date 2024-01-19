@@ -100,6 +100,6 @@ function handleDeleteNote(note?: INote) {
 }
 
 function handleThemeSwitch(isDark: boolean) {
-	noteStore.updateCurrentTheme(isDark ? "night" : "emerald");
+	noteStore.updateAppTheme(isDark ? "night" : "emerald");
 }
 </script>

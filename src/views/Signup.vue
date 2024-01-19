@@ -43,14 +43,14 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import { reactive } from "vue";
 
 import Button from "@/components/Button.vue";
 
 import useAuth from "@/composables/useAuth";
 const { loading, error, signUp } = useAuth();
 
-const userLogin = ref<{ email: string; password: string; phone: string }>({
+const userLogin = reactive<{ email: string; password: string; phone: string }>({
 	email: "",
 	phone: "",
 	password: "",
@@ -58,6 +58,7 @@ const userLogin = ref<{ email: string; password: string; phone: string }>({
 
 // function handleLogin() {
 // 	try {
+// 		const response = signUp(userLogin);
 // 	} catch {}
 // }
 </script>

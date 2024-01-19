@@ -28,4 +28,8 @@ const router = createRouter({
 	],
 });
 
+// router.beforeEach((to, from) => {
+// 	to.name = "Notes" ? router.push({path: '/login'})
+// })
+
 export default router;
