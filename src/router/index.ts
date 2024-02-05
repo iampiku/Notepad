@@ -1,5 +1,7 @@
 import { createRouter, createWebHashHistory } from "vue-router";
 
+import { userSessionStore } from "@/store/UserSessionStore";
+
 /**
  * Views
  */
@@ -14,6 +16,9 @@ const router = createRouter({
 			path: "/",
 			name: "Notes",
 			component: Notes,
+			meta: {
+				needsAuth: true,
+			},
 		},
 		{
 			path: "/login",
@@ -28,8 +33,10 @@ const router = createRouter({
 	],
 });
 
-// router.beforeEach((to, from) => {
-// 	to.name = "Notes" ? router.push({path: '/login'})
-// })
+router.beforeEach((to, from, next) => {
+	const userSession = userSessionStore();
+	if (to.meta["needsAuth"] && userSession?.getUserSession?.user) return next();
+	else return next("/login");
+});
 
 export default router;

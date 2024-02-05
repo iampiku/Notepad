@@ -45,7 +45,8 @@ const userLogin = ref({
 	password: "",
 });
 
-function handleLogin() {
+async function handleLogin() {
+	login({ ...userLogin.value });
 	console.log(userLogin.value);
 }
 </script>

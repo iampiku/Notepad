@@ -8,18 +8,25 @@
 				name="theme-switch"
 				@click="emit('onThemeChange', isDark)"
 			/>
-			<SunIcon class="swap-off fill-current w-8" />
-			<MoonIcon class="swap-on fill-current w-8" />
+			<Component :is="icon" />
 		</label>
 	</div>
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, computed } from "vue";
 
 import SunIcon from "@/components/icons/Sun.vue";
 import MoonIcon from "@/components/icons/Moon.vue";
 
-const isDark = ref<boolean>(true);
+import { useNoteStore } from "@/store/NoteStore";
+const noteStore = useNoteStore();
+
+const isDark = ref(noteStore.getCurrentTheme === "night");
 const emit = defineEmits<(e: "onThemeChange", isDark: boolean) => void>();
+
+const icon = computed(() => (isDark.value ? MoonIcon : SunIcon));
+// const iconClass = computed(() =>
+// 	isDark.value ? "swap-on fill-current w-8" : "swap-off fill-current w-8"
+// );
 </script>

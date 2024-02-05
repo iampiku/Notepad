@@ -25,10 +25,11 @@ export const useNoteStore = defineStore("note", () => {
 	const loading = ref(false);
 	const errorMessage = ref("");
 	const notes = ref<INote[]>([]);
-	const currentTheme = ref<Theme>("emerald");
 
 	const { getItem, setItem } = useLocalStorage<Theme>("theme");
 	const { fetchNotes, addNote, deleteNote, updateNote } = useNotes();
+
+	const currentTheme = ref<Theme>(getItem() ?? "emerald");
 
 	function setLoading(value: boolean) {
 		loading.value = value;
@@ -95,14 +96,13 @@ export const useNoteStore = defineStore("note", () => {
 
 	function loadTheme() {
 		const theme = getItem();
-		currentTheme.value = theme ?? "emerald";
-
-		updateAppTheme(currentTheme.value);
+		updateAppTheme(theme);
 	}
 
-	function updateAppTheme(themeName: Theme) {
+	function updateAppTheme(themeName: Theme | null) {
+		currentTheme.value = themeName ?? "emerald";
 		setItem(currentTheme.value);
-		document.documentElement.setAttribute("data-theme", themeName);
+		document.documentElement.setAttribute("data-theme", currentTheme.value);
 	}
 
 	const getCurrentTheme = computed(() => {
