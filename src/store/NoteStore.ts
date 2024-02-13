@@ -41,7 +41,13 @@ export const useNoteStore = defineStore("note", () => {
 			: "Oops! something wend wrong";
 	}
 
-	async function populateNotes(params: { user_id: number }) {
+	/**
+	 * A function to populate notes for a specific user.
+	 *
+	 * @param {{ user_id: number }} params - an object containing the user ID
+	 * @return {Promise<void>}
+	 */
+	async function populateNotes(params: { user_id: number }): Promise<void> {
 		setLoading(true);
 		try {
 			const response = await fetchNotes(params);
@@ -53,7 +59,6 @@ export const useNoteStore = defineStore("note", () => {
 			setLoading(false);
 		}
 	}
-
 	onMounted(() => {
 		loadTheme();
 	});

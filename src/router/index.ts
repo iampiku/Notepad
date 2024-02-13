@@ -16,9 +16,6 @@ const router = createRouter({
 			path: "/",
 			name: "Notes",
 			component: Notes,
-			meta: {
-				needsAuth: true,
-			},
 		},
 		{
 			path: "/login",
@@ -33,10 +30,11 @@ const router = createRouter({
 	],
 });
 
-router.beforeEach((to, from, next) => {
+router.beforeEach((to, _, next) => {
 	const userSession = userSessionStore();
-	if (to.meta["needsAuth"] && userSession?.getUserSession?.user) return next();
-	else return next("/login");
+	if (to.path === "/" && !userSession?.getUserSession?.user)
+		next({ name: "Login" });
+	else next();
 });
 
 export default router;

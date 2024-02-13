@@ -1,17 +1,23 @@
 <template>
-	<button type="button" class="btn btn-md" :disabled="props.disabled">
+	<button
+		type="button"
+		class="btn btn-sm btn-secondary"
+		:disabled="props.disabled"
+	>
 		<template v-if="loading">
 			<span class="loading loading-spinner"></span>
 		</template>
 		<template v-else>
-			<slot></slot>
+			<slot
+				><span>{{ props.label }}</span></slot
+			>
 		</template>
 	</button>
 </template>
 
 <script setup lang="ts">
 interface Props {
-	label: string;
+	label?: string;
 	loading: boolean;
 	disabled: boolean;
 }

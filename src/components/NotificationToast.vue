@@ -1,6 +1,6 @@
 <template>
 	<div class="toast toast-top toast-end right-10 pt-5">
-		<div class="alert p-2" :class="{ classObject }">
+		<div class="alert p-2" :class="{ notificationType }">
 			<SuccessIcon v-if="props.type === 'success'" />
 			<ErrorIcon v-if="props.type === 'error'" />
 			<InfoIcon v-if="props.type === 'info'" />
@@ -22,7 +22,7 @@ interface Props {
 }
 const props = defineProps<Props>();
 
-const classObject = computed(() => ({
+const notificationType = computed(() => ({
 	"alert-success": props.type === "success",
 	"alert-error": props.type === "error",
 	"alert-info": props.type === "info",
